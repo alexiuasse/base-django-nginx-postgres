@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM python:3.9.6-alpine as builder
+FROM python:3.10.7-alpine as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -32,7 +32,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 #########
 
 # pull official base image
-FROM python:3.9.6-alpine
+FROM python:3.10.7-alpine
 
 # create directory for the app user
 RUN mkdir -p /home/app
@@ -55,9 +55,9 @@ COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.sh
-RUN chmod +x  $APP_HOME/entrypoint.sh
+# COPY ./entrypoint.sh .
+# RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.sh
+# RUN chmod +x $APP_HOME/entrypoint.sh
 
 # copy project
 COPY . $APP_HOME
