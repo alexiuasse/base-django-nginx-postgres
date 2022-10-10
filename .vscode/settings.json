@@ -10,7 +10,7 @@
     "python.linting.lintOnSave": true,
     "python.linting.pylintEnabled": true,
     // "python.linting.pylintArgs": [
-    //     "--rcfile=${env:HOME}/MyProjects/the-fusca/backend/ /.pylintrc"
+    //     "--rcfile=${env:HOME}/MyProjects/base-django-nginx-postgres/backend/ /.pylintrc"
     // ],
     "files.associations": {
         "**/*.html": "html",

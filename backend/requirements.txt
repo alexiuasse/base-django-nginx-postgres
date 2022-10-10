@@ -1,0 +1,10 @@
+Django
+django-allauth
+django-restframework
+gunicorn
+decouple
+psycopg2-binary
+autopep8
+pylint
+pylint-django
+django-debug-toolbar
