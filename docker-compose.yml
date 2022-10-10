@@ -4,10 +4,11 @@ services:
   django:
     build: ./backend
     container_name: django
-    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ./deploy/django/staticfiles:/home/app/staticfiles # to persist static files
-      - ./deploy/django/mediafiles:/home/app/mediafiles # to persist media files
+      - ./deploy/django:/home/app/database
+      - ./deploy/django/staticfiles:/home/app/django/staticfiles # to persist static files
+      - ./deploy/django/mediafiles:/home/app/django/mediafiles # to persist media files
+      - ./deploy/django/logs:/code/logs
     expose:
       - 8000
     env_file:
@@ -31,14 +32,10 @@ services:
     build: ./nginx
     container_name: nginx
     volumes:
-      - ./deploy/django/staticfiles:/staticfiles:ro # to serve django static content
-      - ./deploy/django/mediafiles:/mediafiles:ro # to serve django users media
+      - ./deploy/nginx/log:/var/log/nginx # save nginx logs
+      - ./deploy/django/staticfiles:/staticfiles/:ro # to serve django static content
+      - ./deploy/django/mediafiles:/mediafiles/:ro # to serve django users media
     ports:
       - 1337:80
     depends_on:
       - django
-
-volumes:
-  postgres_data:
-  static_volume:
-  media_volume:
