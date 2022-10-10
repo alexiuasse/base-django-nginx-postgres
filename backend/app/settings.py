@@ -19,10 +19,11 @@ SECRET_KEY = config(
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
+    'DJANGO_ALLOWED_HOSTS',
     default="localhost, 0.0.0.0",
     cast=Csv()
 )
+CSRF_TRUSTED_ORIGINS = config('DJANGO_CSRF_TRUSTED_ORIGINS', cast=Csv())
 
 # EMAIL conf
 EMAIL_HOST = config('DJANGO_EMAIL_HOST')
