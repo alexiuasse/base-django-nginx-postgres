@@ -2,7 +2,7 @@ Django
 django-allauth
 django-restframework
 gunicorn
-decouple
+python-decouple
 psycopg2-binary
 autopep8
 pylint

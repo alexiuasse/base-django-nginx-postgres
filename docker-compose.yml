@@ -5,7 +5,6 @@ services:
     build: ./backend
     command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - ./deploy/django:/home/app/database # to persist sqlite database
       - ./deploy/django/staticfiles:/home/app/staticfiles # to persist static files
       - ./deploy/django/mediafiles:/home/app/mediafiles # to persist media files
     expose:
