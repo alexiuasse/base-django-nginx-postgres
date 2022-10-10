@@ -1,8 +1,9 @@
 version: '3.8'
 
 services:
-  web:
+  django:
     build: ./backend
+    container_name: django
     command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./deploy/django/staticfiles:/home/app/staticfiles # to persist static files
@@ -12,10 +13,11 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - db
+      - postgres
 
-  db:
+  postgres:
     image: postgres:13.0-alpine
+    container_name: postgres_db
     volumes:
       - ./deploy/postgres_db/:/var/lib/postgresql/data
       - ./deploy/postgres_db_dump/:/var/lib/postgresql/dump/
@@ -27,13 +29,14 @@ services:
 
   nginx:
     build: ./nginx
+    container_name: nginx
     volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
+      - ./deploy/django/staticfiles:/staticfiles:ro # to serve django static content
+      - ./deploy/django/mediafiles:/mediafiles:ro # to serve django users media
     ports:
       - 1337:80
     depends_on:
-      - web
+      - django
 
 volumes:
   postgres_data:
