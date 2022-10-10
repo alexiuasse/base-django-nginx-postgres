@@ -20,7 +20,6 @@ services:
     image: postgres:13.0-alpine
     volumes:
       - ./deploy/postgres_db/:/var/lib/postgresql/data
-      - ./deploy/postgres_db_dump/:/var/lib/postgresql/dump/
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
