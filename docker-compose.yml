@@ -3,7 +3,6 @@ version: '3.8'
 services:
   django:
     build: ./backend
-    container_name: django
     volumes:
       - ./deploy/django/staticfiles:/home/app/django/staticfiles # to persist static files
       - ./deploy/django/mediafiles:/home/app/django/mediafiles # to persist media files
@@ -16,9 +15,9 @@ services:
       - postgres
 
   postgres:
-    image: postgres:13.0-alpine
+    image: postgres:alpine
     volumes:
-      - ./deploy/postgres_db/:/var/lib/postgresql/data
+      - ./deploy/postgres/:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -27,7 +26,6 @@ services:
 
   nginx:
     build: ./nginx
-    container_name: nginx
     volumes:
       - ./deploy/nginx/log:/var/log/nginx # save nginx logs
       - ./deploy/django/staticfiles:/staticfiles/:ro # to serve django static content
