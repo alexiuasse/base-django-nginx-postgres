@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-restframework = "*"
+django-allauth = "*"
+psycopg2-binary = "*"
+python-decouple = "*"
+gunicorn = "*"
+
+[dev-packages]
+autopep8 = "*"
+pylint = "*"
+pylint-django = "*"
+django-debug-toolbar = "*"
+
+[requires]
+python_version = "3.10"

@@ -7,3 +7,4 @@ deploy-*/
 # global settings
 .env
 .vscode/*.log
+.venv/

@@ -25,8 +25,5 @@ run:
 admin:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py createsuperuser
 
-db-load-backup:
-	docker exec -i fdp_postgres pg_restore --verbose --clean --no-acl --no-owner -h localhost -U django -d django-db < ./database/init/backup
-
 logs:
 	@$(DOCKER_COMPOSE) logs -f -t
