@@ -127,7 +127,7 @@ class BaseAddressBR(BaseModel):
         verbose_name=_("Cidade"), max_length=255, blank=True, null=True
     )
     uf = models.CharField(
-        verbose_name=_("UF"), max_length=2, choices=UFChoices, blank=True, null=True
+        verbose_name=_("UF"), max_length=2, choices=UFChoices.choices, blank=True, null=True
     )
     inscricao_estadual = models.CharField(
         verbose_name=_("Inscrição Estadual"), max_length=55, blank=True, null=True

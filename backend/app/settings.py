@@ -37,6 +37,7 @@ SERVER_EMAIL = config('DJANGO_SERVER_EMAIL')
 # Application definition
 
 INSTALLED_APPS = [
+    'user',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,6 +78,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'user.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
