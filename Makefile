@@ -25,5 +25,8 @@ run:
 admin:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py createsuperuser
 
+test:
+	@$(DOCKER_COMPOSE) exec -it django python manage.py test
+
 logs:
 	@$(DOCKER_COMPOSE) logs -f -t

@@ -4,6 +4,7 @@ services:
   django:
     build: ./backend
     volumes:
+      - ./backend/:/home/app/django/ # to allow django hot-reload
       - ./deploy/django/staticfiles:/home/app/django/staticfiles # to persist static files
       - ./deploy/django/mediafiles:/home/app/django/mediafiles # to persist media files
       - ./deploy/django/logs:/code/logs

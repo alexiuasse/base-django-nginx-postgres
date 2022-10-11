@@ -13,6 +13,7 @@ class TestDeletion(TestCase):
         self.assertEqual(1, FakeModelTest.deleted_objects.all().count())
 
     def test_restore(self):
+        self.fake_obj.delete()
         self.assertEqual(True, self.fake_obj.is_deleted)
         self.fake_obj.restore()
         self.assertEqual(1, FakeModelTest.objects.all().count())
