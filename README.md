@@ -29,6 +29,9 @@ If changed any version or librarie to ```Pipefile``` or ```Pipefile.lock``` the 
 - ```git push origin develop main 0.0.0.0```
 
 
-## Known Problems
+## Things todo
 
-- database don't persist between startups
+- Different settings for local and production
+- Different docker-compose for local and production
+- Configure django-restframework
+- Configure django-allauth and add google login
