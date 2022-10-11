@@ -3,11 +3,11 @@
 This project is a base one with django running on docker with Nginx and Postgres as database.
 
 
-### How to run
+## How to run
 
 - Run on terminal ```make run```
 
-#### To run in develop and use linting on the fly
+### To run in develop and use linting on the fly
 
 - First create a file ```.env``` that is based of ```.env.template```
 - Create a virtualenv using the pipenv, to install it:
@@ -28,6 +28,10 @@ If changed any version or librarie to ```Pipefile``` or ```Pipefile.lock``` the 
 - ```git checkout develop && git merge --no-ff 0.0.0.0```
 - ```git push origin develop main 0.0.0.0```
 
+## Known Problems
+
+- ~~database don't persist between startups~~
+- can't create an admin by command createsuperuser
 
 ## Things todo
 
@@ -35,3 +39,9 @@ If changed any version or librarie to ```Pipefile``` or ```Pipefile.lock``` the 
 - Different docker-compose for local and production
 - Configure django-restframework
 - Configure django-allauth and add google login
+
+# Rules to pull request and help developing
+
+- Always commit on branch develop develop
+- Pull request will only be reviewed on branch develop
+- Commits must follow the community standarts
