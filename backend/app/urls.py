@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.views.defaults import server_error
+
+from .views import test_send_email
 
 
 urlpatterns = [
-    path('__debug__/', include('debug_toolbar.urls')),
+    path("__debug__/", include('debug_toolbar.urls')),
     path("admin/", admin.site.urls),
-]
 
-if bool(settings.DEBUG):
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("test/error/500/", server_error),
+    path("test/sendemail/", test_send_email),
+]

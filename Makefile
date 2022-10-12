@@ -18,8 +18,14 @@ clean:
 	@$( $(shell docker images -q --filter="reference=*$(dDOCKER_PROJECT_NAME)*") | docker rmi )
 
 run:
-	@$(DOCKER_COMPOSE) build
-	@$(DOCKER_COMPOSE) up -d --force-recreate --remove-orphans
+	$(DOCKER_COMPOSE) build
+	$(DOCKER_COMPOSE) up -d --force-recreate --remove-orphans
+
+logs:
+	$(DOCKER_COMPOSE) logs -f -t
+
+rl:
+	$(MAKE) run
 	$(MAKE) logs
 
 admin:
@@ -37,5 +43,3 @@ compilemessages:
 test:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py test
 
-logs:
-	@$(DOCKER_COMPOSE) logs -f -t
