@@ -178,4 +178,7 @@ class BaseAddressBR(BaseModel):
 
 
 class FakeModelTest(BaseAddressBR):
-    pass
+
+    class Meta:
+        verbose_name = _("Fake model test")
+        verbose_name_plural = _("Fake model tests")

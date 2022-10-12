@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 18:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: base/models.py:109
+msgid "CEP"
+msgstr ""
+
+#: base/models.py:112
+msgid "Logradouro"
+msgstr ""
+
+#: base/models.py:115
+msgid "Número"
+msgstr ""
+
+#: base/models.py:118
+msgid "Bairro"
+msgstr ""
+
+#: base/models.py:121
+msgid "Cidade"
+msgstr ""
+
+#: base/models.py:124
+msgid "UF"
+msgstr ""
+
+#: base/models.py:127
+msgid "Inscrição Estadual"
+msgstr ""
+
+#: base/models.py:130
+msgid "Inscrição Municipal"
+msgstr ""
+
+#: base/models.py:133
+msgid "Código Município"
+msgstr ""
+
+#: base/models.py:136
+msgid "Complemento"
+msgstr ""
+
+#: base/models.py:139
+msgid "Observação"
+msgstr ""
+
+#: base/models.py:183
+msgid "Fake model test"
+msgstr "Modelo falso de teste"
+
+#: base/models.py:184
+msgid "Fake model tests"
+msgstr "Modelo falso de testes"
+
+#: user/models.py:8
+msgid "User"
+msgstr "Usuário"
+
+#: user/models.py:9
+msgid "Users"
+msgstr "Usuários"
