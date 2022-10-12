@@ -49,6 +49,6 @@ RUN pip install --no-cache /wheels/*
 COPY . $APP_HOME
 
 CMD python manage.py collectstatic --noinput && \
-    # python manage.py makemigrations --noinput && \
+    python manage.py makemigrations --noinput && \
     python manage.py migrate --noinput && \
     gunicorn app.wsgi:application -w 2 -b :8000 --reload
