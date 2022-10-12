@@ -11,9 +11,13 @@ This project is a base one with django running on docker with Nginx and Postgres
 
 - First create a file ```.env``` that is based of ```.env.template```
 - Create a virtualenv using the pipenv, to install it:
-    - ```pip install --user pipenv```
+    - ```pip install --user pipenv``` to install pipenv for user
+    - optional before install libraries: ```export PIPENV_VENV_IN_PROJECT=1``` to create a .venv on project folder, in this case vscode will pick automatically
     - ```pipenv install``` to install all packages needed
     - ```pipenv shell``` to activate the virtual environment
+
+If not using the ```export PIPENV_VENV_IN_PROJECT=1``` you must do:
+
 - To let vscode handle the linting for django and python you must select the right python interpreter, press ```ctrl + shift + p``` search for ```Python:Select Interpreter``` and select the one with ```PipEnv``` on it, should have the name of the project in it.
 
 If changed any version or librarie to ```Pipefile``` or ```Pipefile.lock``` the ```requirements.txt``` must be updated, just run:

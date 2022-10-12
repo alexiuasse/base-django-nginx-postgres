@@ -65,7 +65,7 @@ class BaseModel(BaseLog):
     class Meta:
         abstract = True
 
-    def delete(self, cascade=None, *args, **kwargs):
+    def delete(self, *args, cascade=None, **kwargs):
         cascade = True
         self.is_deleted = True
         self.deleted_at = now()
@@ -73,7 +73,6 @@ class BaseModel(BaseLog):
         self.after_delete()
         if cascade:
             self.delete_related_objects()
-        # TODO: Call soft_delete_signals
 
     def restore(self, cascade=None):
         cascade = True
@@ -83,7 +82,6 @@ class BaseModel(BaseLog):
         self.after_restore()
         if cascade:
             self.restore_related_objects()
-        # TODO: Call soft_delete_signals
 
     def hard_delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
