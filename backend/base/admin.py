@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import FakeModelTest
+from .models import FakeModelTest, AddressBR, Historic
 
 
 class SoftDeletedModelAdmin(admin.ModelAdmin):
@@ -16,4 +16,14 @@ class FakeModelTestAdmin(SoftDeletedModelAdmin):
     pass
 
 
+class AddressBRAdmin(SoftDeletedModelAdmin):
+    pass
+
+
+class HistoricAdmin(SoftDeletedModelAdmin):
+    pass
+
+
 admin.site.register(FakeModelTest, FakeModelTestAdmin)
+admin.site.register(AddressBR, AddressBRAdmin)
+admin.site.register(Historic, HistoricAdmin)
