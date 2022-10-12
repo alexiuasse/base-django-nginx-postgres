@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.timezone import now
+from django.utils.functional import cached_property
 
 from base.enums import UFChoices
 
@@ -46,7 +47,6 @@ class BaseLog(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    # ip_address = models.GenericIPAddressField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -59,9 +59,6 @@ class BaseLog(models.Model):
 
 
 class BaseModel(BaseLog):
-    owner = models.ForeignKey(
-        "user.CustomUser", verbose_name=_("Owner"), on_delete=models.CASCADE, null=True, blank=True
-    )
     objects = BaseManager()
     deleted_objects = DeletedManager()
     global_objects = GlobalManager()
@@ -69,7 +66,7 @@ class BaseModel(BaseLog):
     class Meta:
         abstract = True
 
-    def delete(self, cascade=None, *args, **kwargs):
+    def delete(self, *args, cascade=None, **kwargs):
         cascade = True
         self.is_deleted = True
         self.deleted_at = now()
@@ -77,7 +74,6 @@ class BaseModel(BaseLog):
         self.after_delete()
         if cascade:
             self.delete_related_objects()
-        # TODO: Call soft_delete_signals
 
     def restore(self, cascade=None):
         cascade = True
@@ -87,7 +83,6 @@ class BaseModel(BaseLog):
         self.after_restore()
         if cascade:
             self.restore_related_objects()
-        # TODO: Call soft_delete_signals
 
     def hard_delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -149,9 +144,13 @@ class BaseAddressBR(BaseModel):
         abstract = True
 
     def __str__(self):
-        return f"{self.logradouro}, {self.numero}, {self.bairro}, {self.localidade} - {self.uf}"
+        full_address = self.full_address
+        if not full_address:
+            return _("Fake model test {}").format(self.id)
+        return full_address
 
-    def get_full_address(self):
+    @cached_property
+    def full_address(self):
         full_address = ""
         if self.logradouro:
             full_address += self.logradouro
@@ -184,4 +183,7 @@ class BaseAddressBR(BaseModel):
 
 
 class FakeModelTest(BaseAddressBR):
-    pass
+
+    class Meta:
+        verbose_name = _("Fake model test")
+        verbose_name_plural = _("Fake model tests")

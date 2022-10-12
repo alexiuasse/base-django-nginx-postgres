@@ -25,6 +25,15 @@ run:
 admin:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py createsuperuser
 
+makemigrations:
+	@$(DOCKER_COMPOSE) exec -it django python manage.py makemigrations
+
+makemessages:
+	@$(DOCKER_COMPOSE) exec -it django django-admin makemessages -l pt_BR
+
+compilemessages:
+	@$(DOCKER_COMPOSE) exec -it django django-admin compilemessages
+
 test:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py test
 

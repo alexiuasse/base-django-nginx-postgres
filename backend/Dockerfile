@@ -40,7 +40,7 @@ RUN mkdir $APP_HOME/mediafiles
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apk update && apk add libpq
+RUN apk update && apk add libpq gettext-dev
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
@@ -49,5 +49,6 @@ RUN pip install --no-cache /wheels/*
 COPY . $APP_HOME
 
 CMD python manage.py collectstatic --noinput && \
+    # python manage.py makemigrations --noinput && \
     python manage.py migrate --noinput && \
-    gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    gunicorn app.wsgi:application -w 2 -b :8000 --reload

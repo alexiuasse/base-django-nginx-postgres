@@ -3,11 +3,12 @@ version: '3.8'
 services:
   django:
     build: ./backend
+    restart: always
     volumes:
-      - ./backend/:/home/app/django/ # to allow django hot-reload
+      - ./backend/.:/home/app/django/ # to allow django hot-reload
       - ./deploy/django/staticfiles:/home/app/django/staticfiles # to persist static files
       - ./deploy/django/mediafiles:/home/app/django/mediafiles # to persist media files
-      - ./deploy/django/logs:/code/logs
+      - ./deploy/django/logs:/home/app/django/logs
     expose:
       - 8000
     env_file:
