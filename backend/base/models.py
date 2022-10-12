@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.timezone import now
 from django.utils.functional import cached_property
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from base.enums import UFChoices
 
@@ -105,7 +107,7 @@ class BaseModel(BaseLog):
         pass
 
 
-class BaseAddressBR(BaseModel):
+class AddressBR(BaseModel):
     cep = models.CharField(
         verbose_name=_("CEP"), max_length=9, blank=True, null=True
     )
@@ -139,15 +141,21 @@ class BaseAddressBR(BaseModel):
     observacao = models.TextField(
         verbose_name=_("Observação"), blank=True, null=True
     )
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        abstract = True
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
 
     def __str__(self):
-        full_address = self.full_address
-        if not full_address:
-            return _("Fake model test {}").format(self.id)
-        return full_address
+        return self.full_address
 
     @cached_property
     def full_address(self):
@@ -166,7 +174,8 @@ class BaseAddressBR(BaseModel):
             full_address += f" ({self.complemento})"
         return full_address
 
-    def get_data_as_dict(self):
+    @cached_property
+    def as_dict(self):
         return {
             'cep': self.cep,
             'logradouro': self.logradouro,
@@ -182,7 +191,26 @@ class BaseAddressBR(BaseModel):
         }
 
 
-class FakeModelTest(BaseAddressBR):
+class Historic(BaseModel):
+    description = models.TextField(verbose_name=_("Description"))
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    class Meta:
+        verbose_name = _("Historic")
+        verbose_name_plural = _("Historics")
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+
+    def __str__(self):
+        return self.description
+
+
+class FakeModelTest(BaseModel):
 
     class Meta:
         verbose_name = _("Fake model test")
