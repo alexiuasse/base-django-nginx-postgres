@@ -35,7 +35,7 @@ If changed any version or librarie to ```Pipefile``` or ```Pipefile.lock``` the 
 ## Known Problems
 
 - ~~database don't persist between startups~~
-- can't create an admin by command createsuperuser
+- ~~can't create an admin by command createsuperuser~~
 
 ## Things todo
 
