@@ -33,6 +33,6 @@ services:
       - ./deploy/django/staticfiles:/staticfiles/:ro # to serve django static content
       - ./deploy/django/mediafiles:/mediafiles/:ro # to serve django users media
     ports:
-      - 1337:80
+      - 8000:80
     depends_on:
       - django
