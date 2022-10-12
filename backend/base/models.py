@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.timezone import now
+from django.utils.functional import cached_property
 
 from base.enums import UFChoices
 
@@ -143,9 +144,13 @@ class BaseAddressBR(BaseModel):
         abstract = True
 
     def __str__(self):
-        return f"{self.logradouro}, {self.numero}, {self.bairro}, {self.localidade} - {self.uf}"
+        full_address = self.full_address
+        if not full_address:
+            return _("Fake model test {}").format(self.id)
+        return full_address
 
-    def get_full_address(self):
+    @cached_property
+    def full_address(self):
         full_address = ""
         if self.logradouro:
             full_address += self.logradouro

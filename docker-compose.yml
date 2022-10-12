@@ -3,6 +3,7 @@ version: '3.8'
 services:
   django:
     build: ./backend
+    restart: always
     volumes:
       - ./backend/.:/home/app/django/ # to allow django hot-reload
       - ./deploy/django/staticfiles:/home/app/django/staticfiles # to persist static files
