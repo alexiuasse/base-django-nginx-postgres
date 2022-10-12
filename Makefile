@@ -25,6 +25,9 @@ run:
 admin:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py createsuperuser
 
+makemigrations:
+	@$(DOCKER_COMPOSE) exec -it django python manage.py makemigrations
+
 test:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py test
 

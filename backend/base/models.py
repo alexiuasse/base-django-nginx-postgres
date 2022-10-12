@@ -46,7 +46,6 @@ class BaseLog(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    # ip_address = models.GenericIPAddressField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -59,9 +58,6 @@ class BaseLog(models.Model):
 
 
 class BaseModel(BaseLog):
-    owner = models.ForeignKey(
-        "user.CustomUser", verbose_name=_("Owner"), on_delete=models.CASCADE, null=True, blank=True
-    )
     objects = BaseManager()
     deleted_objects = DeletedManager()
     global_objects = GlobalManager()
