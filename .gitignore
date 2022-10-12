@@ -4,6 +4,11 @@ __pycache__/
 deploy/
 deploy-*/
 
+# django
+backend/mediafiles/
+backend/staticfiles/
+backend/logs/
+
 # global settings
 .env
 .vscode/*.log
