@@ -28,6 +28,22 @@ class TestHistoric(TestCase):
         )
         self.assertEqual(1, Historic.objects.all().count())
 
+    def test_auto_create(self):
+        obj = FakeModelTest.objects.create()
+        obj.test = "B"
+        obj.save()
+        self.assertEqual(1, obj.historics.count())
+
+    def test_fk(self):
+        obj = FakeModelTest.objects.create()
+        obj2 = FakeModelTest.objects.create()
+        obj.test_fk = obj2
+        obj.save()
+        self.assertEqual(
+            f"test_fk_id None -> {obj2.pk}",
+            obj.historics.first().description
+        )
+
 
 class TestAddress(TestCase):
     def test_create(self):

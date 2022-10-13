@@ -1,11 +1,15 @@
+import logging
+
 from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.timezone import now
 from django.utils.functional import cached_property
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 from base.enums import UFChoices
+
+logger = logging.getLogger(__name__)
 
 
 class SoftDeleteQuerySet(models.query.QuerySet):
@@ -61,12 +65,48 @@ class BaseLog(models.Model):
 
 
 class BaseModel(BaseLog):
+    historics = GenericRelation("base.Historic")
     objects = BaseManager()
     deleted_objects = DeletedManager()
     global_objects = GlobalManager()
 
     class Meta:
         abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self._fields_to_watch():
+            setattr(self, f"__{field}", getattr(self, field))
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            self._create_historic()
+        super().save(*args, **kwargs)
+
+    def _fields_to_watch(self):
+        """
+        Add in here the field names that you wanna to lookup for changes.
+
+        If it's a foreign key, for better results add field_name_id to avoid a database query
+        """
+        return []
+
+    def _historic_message(self):
+        changes = []
+        for field in self._fields_to_watch():
+            old = getattr(self, f"__{field}")
+            new = getattr(self, field)
+            if new != old:
+                changes.append(f"{field} {old} -> {new}")
+        return ' '.join(changes)
+
+    def _create_historic(self):
+        message = self._historic_message()
+        if message:
+            Historic.objects.create(
+                content_object=self,
+                description=message
+            )
 
     def delete(self, *args, cascade=None, **kwargs):
         cascade = True
@@ -157,6 +197,13 @@ class AddressBR(BaseModel):
     def __str__(self):
         return self.full_address
 
+    def _fields_to_watch(self):
+        return [
+            'cep', 'logradouro', 'numero', 'bairro', 'localidade', 'uf',
+            'inscricao_estadual', 'inscricao_municipal', 'codigo_municipio',
+            'complemento', 'observacao'
+        ]
+
     @cached_property
     def full_address(self):
         full_address = ""
@@ -174,7 +221,6 @@ class AddressBR(BaseModel):
             full_address += f" ({self.complemento})"
         return full_address
 
-    @cached_property
     def as_dict(self):
         return {
             'cep': self.cep,
@@ -211,7 +257,17 @@ class Historic(BaseModel):
 
 
 class FakeModelTest(BaseModel):
+    test = models.CharField(max_length=1, default="A")
+    test_fk = models.ForeignKey(
+        "base.FakeModelTest", on_delete=models.CASCADE, null=True, blank=True
+    )
 
     class Meta:
         verbose_name = _("Fake model test")
         verbose_name_plural = _("Fake model tests")
+
+    def __str__(self):
+        return _("Fake model test {}").format(self.pk)
+
+    def _fields_to_watch(self):
+        return ['test', 'test_fk_id']

@@ -24,6 +24,7 @@ class HistoricAdmin(SoftDeletedModelAdmin):
     pass
 
 
-admin.site.register(FakeModelTest, FakeModelTestAdmin)
+# admin.site.register(FakeModelTest, FakeModelTestAdmin)
+admin.site.register(FakeModelTest)
 admin.site.register(AddressBR, AddressBRAdmin)
 admin.site.register(Historic, HistoricAdmin)
