@@ -49,10 +49,10 @@ class GlobalManager(models.Manager):
 
 
 class BaseLog(models.Model):
-    created_at = models.DateTimeField(null=True, blank=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
-    is_deleted = models.BooleanField(default=False)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(_("Created at"), null=True, blank=True)
+    updated_at = models.DateTimeField(_("Updated at"), null=True, blank=True)
+    is_deleted = models.BooleanField(_("Is deleted"), default=False)
+    deleted_at = models.DateTimeField(_("Deleted at"), null=True, blank=True)
 
     class Meta:
         abstract = True

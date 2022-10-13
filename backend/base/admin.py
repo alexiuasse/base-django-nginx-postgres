@@ -4,12 +4,8 @@ from .models import FakeModelTest, AddressBR, Historic
 
 
 class SoftDeletedModelAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        qs = self.model.deleted_objects.get_queryset()
-        ordering = self.get_ordering(request)
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
+    list_filter = ("is_deleted", )
+    list_display = ("__str__", "is_deleted")
 
 
 class FakeModelTestAdmin(SoftDeletedModelAdmin):
@@ -21,10 +17,18 @@ class AddressBRAdmin(SoftDeletedModelAdmin):
 
 
 class HistoricAdmin(SoftDeletedModelAdmin):
-    pass
+    list_display = ("__str__", )
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
-# admin.site.register(FakeModelTest, FakeModelTestAdmin)
-admin.site.register(FakeModelTest)
+admin.site.register(FakeModelTest, FakeModelTestAdmin)
 admin.site.register(AddressBR, AddressBRAdmin)
 admin.site.register(Historic, HistoricAdmin)

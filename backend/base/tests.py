@@ -30,6 +30,7 @@ class TestHistoric(TestCase):
 
     def test_auto_create(self):
         obj = FakeModelTest.objects.create()
+        self.assertEqual(0, obj.historics.count())
         obj.test = "B"
         obj.save()
         self.assertEqual(1, obj.historics.count())
