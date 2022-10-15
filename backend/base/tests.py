@@ -33,6 +33,7 @@ class TestHistoric(TestCase):
         self.assertEqual(0, obj.historics.count())
         obj.test = "B"
         obj.save()
+        obj.create_historic()
         self.assertEqual(1, obj.historics.count())
 
     def test_fk(self):
@@ -40,8 +41,9 @@ class TestHistoric(TestCase):
         obj2 = FakeModelTest.objects.create()
         obj.test_fk = obj2
         obj.save()
+        obj.create_historic()
         self.assertEqual(
-            f"test_fk_id None -> {obj2.pk}",
+            f"Anonymous user changed: test_fk_id None -> {obj2.pk}",
             obj.historics.first().description
         )
 

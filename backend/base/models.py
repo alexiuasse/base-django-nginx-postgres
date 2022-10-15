@@ -1,4 +1,5 @@
 import logging
+from tokenize import blank_re
 
 from django.db import models
 from django.utils.translation import gettext as _
@@ -78,11 +79,6 @@ class BaseModel(BaseLog):
         for field in self._fields_to_watch():
             setattr(self, f"__{field}", getattr(self, field))
 
-    def save(self, *args, **kwargs):
-        if not self._state.adding:
-            self._create_historic()
-        super().save(*args, **kwargs)
-
     def _fields_to_watch(self):
         """
         Add in here the field names that you wanna to lookup for changes.
@@ -100,12 +96,19 @@ class BaseModel(BaseLog):
                 changes.append(f"{field} {old} -> {new}")
         return ' '.join(changes)
 
-    def _create_historic(self):
-        message = self._historic_message()
+    def create_historic(self, req=None):
+        message = ""
+        user = req.user if req and req.user and not req.user.is_anonymous else None
+        if user:
+            message += _("User {} changed: ").format(user)
+        else:
+            message += _("Anonymous user changed: ")
+        message += self._historic_message()
         if message:
             Historic.objects.create(
                 content_object=self,
-                description=message
+                description=message,
+                user=user
             )
 
     def delete(self, *args, cascade=None, **kwargs):
@@ -238,6 +241,9 @@ class AddressBR(BaseModel):
 
 
 class Historic(BaseModel):
+    user = models.ForeignKey(
+        "user.Customuser", on_delete=models.CASCADE, null=True, blank=True
+    )
     description = models.TextField(verbose_name=_("Description"))
     content_type = models.ForeignKey(
         ContentType, on_delete=models.CASCADE, null=True, blank=True
