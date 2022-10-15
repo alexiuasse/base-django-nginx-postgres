@@ -1,9 +1,16 @@
+import logging
+from tokenize import blank_re
+
 from django.db import models
 from django.utils.translation import gettext as _
 from django.utils.timezone import now
 from django.utils.functional import cached_property
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 from base.enums import UFChoices
+
+logger = logging.getLogger(__name__)
 
 
 class SoftDeleteQuerySet(models.query.QuerySet):
@@ -43,10 +50,10 @@ class GlobalManager(models.Manager):
 
 
 class BaseLog(models.Model):
-    created_at = models.DateTimeField(null=True, blank=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
-    is_deleted = models.BooleanField(default=False)
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(_("Created at"), null=True, blank=True)
+    updated_at = models.DateTimeField(_("Updated at"), null=True, blank=True)
+    is_deleted = models.BooleanField(_("Is deleted"), default=False)
+    deleted_at = models.DateTimeField(_("Deleted at"), null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -59,12 +66,50 @@ class BaseLog(models.Model):
 
 
 class BaseModel(BaseLog):
+    historics = GenericRelation("base.Historic")
     objects = BaseManager()
     deleted_objects = DeletedManager()
     global_objects = GlobalManager()
 
     class Meta:
         abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self._fields_to_watch():
+            setattr(self, f"__{field}", getattr(self, field))
+
+    def _fields_to_watch(self):
+        """
+        Add in here the field names that you wanna to lookup for changes.
+
+        If it's a foreign key, for better results add field_name_id to avoid a database query
+        """
+        return []
+
+    def _historic_message(self):
+        changes = []
+        for field in self._fields_to_watch():
+            old = getattr(self, f"__{field}")
+            new = getattr(self, field)
+            if new != old:
+                changes.append(f"{field} {old} -> {new}")
+        return ' '.join(changes)
+
+    def create_historic(self, req=None):
+        message = ""
+        user = req.user if req and req.user and not req.user.is_anonymous else None
+        if user:
+            message += _("User {} changed: ").format(user)
+        else:
+            message += _("Anonymous user changed: ")
+        message += self._historic_message()
+        if message:
+            Historic.objects.create(
+                content_object=self,
+                description=message,
+                user=user
+            )
 
     def delete(self, *args, cascade=None, **kwargs):
         cascade = True
@@ -105,7 +150,7 @@ class BaseModel(BaseLog):
         pass
 
 
-class BaseAddressBR(BaseModel):
+class AddressBR(BaseModel):
     cep = models.CharField(
         verbose_name=_("CEP"), max_length=9, blank=True, null=True
     )
@@ -139,15 +184,28 @@ class BaseAddressBR(BaseModel):
     observacao = models.TextField(
         verbose_name=_("Observação"), blank=True, null=True
     )
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        abstract = True
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
 
     def __str__(self):
-        full_address = self.full_address
-        if not full_address:
-            return _("Fake model test {}").format(self.id)
-        return full_address
+        return self.full_address
+
+    def _fields_to_watch(self):
+        return [
+            'cep', 'logradouro', 'numero', 'bairro', 'localidade', 'uf',
+            'inscricao_estadual', 'inscricao_municipal', 'codigo_municipio',
+            'complemento', 'observacao'
+        ]
 
     @cached_property
     def full_address(self):
@@ -166,7 +224,7 @@ class BaseAddressBR(BaseModel):
             full_address += f" ({self.complemento})"
         return full_address
 
-    def get_data_as_dict(self):
+    def as_dict(self):
         return {
             'cep': self.cep,
             'logradouro': self.logradouro,
@@ -182,8 +240,40 @@ class BaseAddressBR(BaseModel):
         }
 
 
-class FakeModelTest(BaseAddressBR):
+class Historic(BaseModel):
+    user = models.ForeignKey(
+        "user.Customuser", on_delete=models.CASCADE, null=True, blank=True
+    )
+    description = models.TextField(verbose_name=_("Description"))
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    class Meta:
+        verbose_name = _("Historic")
+        verbose_name_plural = _("Historics")
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+
+    def __str__(self):
+        return self.description
+
+
+class FakeModelTest(BaseModel):
+    test = models.CharField(max_length=1, default="A")
+    test_fk = models.ForeignKey(
+        "base.FakeModelTest", on_delete=models.CASCADE, null=True, blank=True
+    )
 
     class Meta:
         verbose_name = _("Fake model test")
         verbose_name_plural = _("Fake model tests")
+
+    def __str__(self):
+        return _("Fake model test {}").format(self.pk)
+
+    def _fields_to_watch(self):
+        return ['test', 'test_fk_id']

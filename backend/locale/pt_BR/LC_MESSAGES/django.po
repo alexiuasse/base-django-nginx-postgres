@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 19:10+0000\n"
+"POT-Creation-Date: 2022-10-13 12:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,61 +18,97 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: base/models.py:110
+#: base/models.py:52
+msgid "Created at"
+msgstr "Criado em"
+
+#: base/models.py:53
+msgid "Updated at"
+msgstr "Atualizado em"
+
+#: base/models.py:54
+msgid "Is deleted"
+msgstr "Deletado"
+
+#: base/models.py:55
+msgid "Deleted at"
+msgstr "Deletado em"
+
+#: base/models.py:152
 msgid "CEP"
 msgstr ""
 
-#: base/models.py:113
+#: base/models.py:155
 msgid "Logradouro"
 msgstr ""
 
-#: base/models.py:116
+#: base/models.py:158
 msgid "Número"
 msgstr ""
 
-#: base/models.py:119
+#: base/models.py:161
 msgid "Bairro"
 msgstr ""
 
-#: base/models.py:122
+#: base/models.py:164
 msgid "Cidade"
 msgstr ""
 
-#: base/models.py:125
+#: base/models.py:167
 msgid "UF"
 msgstr ""
 
-#: base/models.py:128
+#: base/models.py:170
 msgid "Inscrição Estadual"
 msgstr ""
 
-#: base/models.py:131
+#: base/models.py:173
 msgid "Inscrição Municipal"
 msgstr ""
 
-#: base/models.py:134
+#: base/models.py:176
 msgid "Código Município"
 msgstr ""
 
-#: base/models.py:137
+#: base/models.py:179
 msgid "Complemento"
 msgstr ""
 
-#: base/models.py:140
+#: base/models.py:182
 msgid "Observação"
 msgstr ""
 
-#: base/models.py:149
-msgid "Fake model test {}"
-msgstr "Modelo falso de teste {}"
+#: base/models.py:191
+msgid "Address"
+msgstr "Endereço"
 
-#: base/models.py:188
+#: base/models.py:192
+msgid "Addresses"
+msgstr "Endereços"
+
+#: base/models.py:241
+msgid "Description"
+msgstr "Descrição"
+
+#: base/models.py:249
+msgid "Historic"
+msgstr "Histórico"
+
+#: base/models.py:250
+msgid "Historics"
+msgstr "Históricos"
+
+#: base/models.py:266
 msgid "Fake model test"
 msgstr "Modelo falso de teste"
 
-#: base/models.py:189
+#: base/models.py:267
 msgid "Fake model tests"
 msgstr "Modelo falso de testes"
+
+#: base/models.py:270
+msgid "Fake model test {}"
+msgstr "Modelo falso de teste {}"
 
 #: user/models.py:8
 msgid "User"

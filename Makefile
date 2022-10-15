@@ -32,7 +32,14 @@ admin:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py createsuperuser
 
 makemigrations:
-	@$(DOCKER_COMPOSE) exec -it django python manage.py makemigrations
+	@$(DOCKER_COMPOSE) exec -it django python manage.py makemigrations --noinput
+
+migrate:
+	@$(DOCKER_COMPOSE) exec -it django python manage.py migrate --noinput
+
+update-models:
+	@$(MAKE) makemigrations
+	@$(MAKE) migrate
 
 makemessages:
 	@$(DOCKER_COMPOSE) exec -it django django-admin makemessages -l pt_BR
@@ -42,4 +49,11 @@ compilemessages:
 
 test:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py test
+
+reset-migrations:
+	@echo -n "Are you sure? [y/N] " && read ans && [ $${ans:-N} = y ]
+	@find ./backend -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	@find ./backend -path "*/migrations/*.pyc"  -delete
+	@echo "All migrations deleted"
+
 
