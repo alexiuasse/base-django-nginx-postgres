@@ -38,8 +38,8 @@ migrate:
 	@$(DOCKER_COMPOSE) exec -it django python manage.py migrate --noinput
 
 update-models:
-	$(MAKE) makemigrations
-	$(MAKE) migrate
+	@$(MAKE) makemigrations
+	@$(MAKE) migrate
 
 makemessages:
 	@$(DOCKER_COMPOSE) exec -it django django-admin makemessages -l pt_BR
