@@ -14,10 +14,11 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+    && apk add postgresql-dev gcc python3-dev musl-dev libc-dev linux-headers
 
 # install dependencies
 COPY ./requirements.txt .
+RUN pip install --upgrade pip
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 
@@ -27,6 +28,10 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 
 # pull official base image
 FROM python:3.10.7-alpine
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # create directory for the app user
 RUN mkdir -p /home/app
@@ -51,4 +56,4 @@ COPY . $APP_HOME
 CMD python manage.py collectstatic --noinput && \
     # python manage.py makemigrations --noinput && \
     python manage.py migrate --noinput && \
-    gunicorn app.wsgi:application -w 2 -b :8000 --reload
+    uwsgi --ini $APP_HOME/uwsgi.ini

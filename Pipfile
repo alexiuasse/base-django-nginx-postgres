@@ -9,11 +9,11 @@ django-restframework = "*"
 django-allauth = "*"
 psycopg2-binary = "*"
 python-decouple = "*"
-gunicorn = "*"
 autopep8 = "*"
 pylint = "*"
 pylint-django = "*"
 django-debug-toolbar = "*"
+uwsgi = "*"
 
 [dev-packages]
 

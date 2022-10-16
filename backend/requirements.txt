@@ -11,7 +11,6 @@ Django==4.1.2
 django-allauth==0.51.0
 django-debug-toolbar==3.7.0
 django-restframework==0.0.1
-gunicorn==20.1.0
 idna==3.4
 isort==5.10.1
 lazy-object-proxy==1.7.1
@@ -33,6 +32,7 @@ sqlparse==0.4.3
 toml==0.10.2
 tomli==2.0.1
 tomlkit==0.11.5
-types-cryptography==3.3.23
+types-cryptography==3.3.23.1
 urllib3==1.26.12
+uWSGI==2.0.20
 wrapt==1.14.1
