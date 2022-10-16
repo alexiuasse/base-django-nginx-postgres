@@ -15,6 +15,7 @@ def test_send_email(request):
     logger.debug(
         f"Test for sending email: from {settings.DEFAULT_FROM_EMAIL} to {settings.DEFAULT_FROM_EMAIL}"
     )
+
     send_mail(
         "Testing send email",
         f"Testing send email from user {request.user}",
