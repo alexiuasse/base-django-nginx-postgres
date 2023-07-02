@@ -6,6 +6,7 @@ from .models import FakeModelTest, AddressBR, Historic
 class SoftDeletedModelAdmin(admin.ModelAdmin):
     list_filter = ("is_deleted", )
     list_display = ("__str__", "is_deleted")
+    readonly_fields = ("created_at", "updated_at", "deleted_at", "is_deleted",)
 
 
 class FakeModelTestAdmin(SoftDeletedModelAdmin):
